@@ -97,11 +97,37 @@
   </entry>
   
   <entry>
+    <title>C语言笔记</title>
+    <link href="https://blog.tmc1900.com/c-language/"/>
+    <id>https://blog.tmc1900.com/c-language/</id>
+    <published>2016-10-12T07:35:21.000Z</published>
+    <updated>2016-10-12T07:44:15.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>C highlight</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line"> * Proxy.cpp</div><div class="line"> *</div><div class="line"> *  Created on: Dec 26, 2014</div><div class="line"> *      Author: ubuntu</div><div class="line"> */</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"Proxy.h"</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"RealSubject.h"</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="keyword">namespace</span> proxy &#123;</div><div class="line"></div><div class="line">Proxy::Proxy() &#123;</div><div class="line">	<span class="comment">// TODO Auto-generated constructor stub</span></div><div class="line">	m_pRealSubject = <span class="literal">NULL</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">Proxy::~Proxy() &#123;</div><div class="line">	<span class="comment">// TODO Auto-generated destructor stub</span></div><div class="line">	<span class="keyword">if</span> (m_pRealSubject) &#123;</div><div class="line">		<span class="keyword">delete</span> m_pRealSubject;</div><div class="line">		m_pRealSubject = <span class="literal">NULL</span>;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> Proxy::Request() &#123;</div><div class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"Proxy::Request()"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line"></div><div class="line">	<span class="comment">//<span class="doctag">NOTE:</span> NOT multi-thread safe</span></div><div class="line">	<span class="keyword">if</span> (<span class="literal">NULL</span> == m_pRealSubject) &#123;</div><div class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"* new RealSubject"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line"></div><div class="line">		<span class="comment">//<span class="doctag">NOTE:</span> Virtual Proxy when need to new RealSubject</span></div><div class="line">		m_pRealSubject = <span class="keyword">new</span> RealSubject();</div><div class="line">	&#125;</div><div class="line">	m_pRealSubject-&gt;Request();</div><div class="line">&#125;</div><div class="line"></div><div class="line">&#125; <span class="comment">/* namespace proxy */</span> </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<p><strong>版权声明</strong></p>
+<p>作者: <a href="https://blog.tmc1900.com/about">Marcus Tang</a><br>许可证: <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" target="_blank" rel="external">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a><br>License: <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="external">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><br>本文永久链接: <a href="https://blog.tmc1900.com/c-language/">https://blog.tmc1900.com/c-language/</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;C highlight&lt;/p&gt;
+&lt;figure class=&quot;highlight cpp&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div c
+    
+    </summary>
+    
+    
+      <category term="program" scheme="https://blog.tmc1900.com/tags/program/"/>
+    
+  </entry>
+  
+  <entry>
     <title>北京之行</title>
     <link href="https://blog.tmc1900.com/beijing-open/"/>
     <id>https://blog.tmc1900.com/beijing-open/</id>
     <published>2016-10-07T11:40:41.000Z</published>
-    <updated>2017-11-21T06:39:04.785Z</updated>
+    <updated>2017-11-21T06:39:04.000Z</updated>
     
     <content type="html"><![CDATA[<p>2016年十月</p>
 <p>趁着国庆节放假的时间，也背上包坐上车到了读书时就一直想去的一座城，北京。<br>究其原因可能是因为一句话吧，“围城：城中的人想出去，城外的人想进来”。</p>
@@ -132,7 +158,7 @@
     <link href="https://blog.tmc1900.com/hello-world/"/>
     <id>https://blog.tmc1900.com/hello-world/</id>
     <published>2016-09-24T03:57:03.000Z</published>
-    <updated>2016-10-09T07:25:30.015Z</updated>
+    <updated>2016-10-09T07:25:30.000Z</updated>
     
     <content type="html"><![CDATA[<p>Motto:</p>
 <pre><code>Do a pair of free fish
