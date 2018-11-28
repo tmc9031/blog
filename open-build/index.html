@@ -1,64 +1,24 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
 
   
   <title>opensource 的循环依赖 | F.</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="这篇文章主要记录下在openssl和一些依赖ssl的应用程序的编译过程中，遇到的一些问题和和思考。
-一个原则通常源代码编译应该是只包含3个步骤
-
-配置
-编译
-部署
-
-配置多种多样，但编译理应与配置区配开来，不需要再进行相似的配置，理想情况只需一个 make 即可
-循环依赖最近升级opensource模块，遇到一个很有趣的情况，需要编译的模块如下：
-
-openssl
-libssh2
-curl
-
-正常">
+  <meta name="description" content="这篇文章主要记录下在openssl和一些依赖ssl的应用程序的编译过程中，遇到的一些问题和和思考。 一个原则通常源代码编译应该是只包含3个步骤  配置 编译 部署  配置多种多样，但编译理应与配置区配开来，不需要再进行相似的配置，理想情况只需一个 make 即可 循环依赖最近升级opensource模块，遇到一个很有趣的情况，需要编译的模块如下：  openssl libssh2 curl  正常">
+<meta name="keywords" content="build">
 <meta property="og:type" content="article">
 <meta property="og:title" content="opensource 的循环依赖">
 <meta property="og:url" content="https://blog.tmc1900.com/open-build/index.html">
 <meta property="og:site_name" content="F.">
-<meta property="og:description" content="这篇文章主要记录下在openssl和一些依赖ssl的应用程序的编译过程中，遇到的一些问题和和思考。
-一个原则通常源代码编译应该是只包含3个步骤
-
-配置
-编译
-部署
-
-配置多种多样，但编译理应与配置区配开来，不需要再进行相似的配置，理想情况只需一个 make 即可
-循环依赖最近升级opensource模块，遇到一个很有趣的情况，需要编译的模块如下：
-
-openssl
-libssh2
-curl
-
-正常">
+<meta property="og:description" content="这篇文章主要记录下在openssl和一些依赖ssl的应用程序的编译过程中，遇到的一些问题和和思考。 一个原则通常源代码编译应该是只包含3个步骤  配置 编译 部署  配置多种多样，但编译理应与配置区配开来，不需要再进行相似的配置，理想情况只需一个 make 即可 循环依赖最近升级opensource模块，遇到一个很有趣的情况，需要编译的模块如下：  openssl libssh2 curl  正常">
+<meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2016-12-01T07:06:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="opensource 的循环依赖">
-<meta name="twitter:description" content="这篇文章主要记录下在openssl和一些依赖ssl的应用程序的编译过程中，遇到的一些问题和和思考。
-一个原则通常源代码编译应该是只包含3个步骤
-
-配置
-编译
-部署
-
-配置多种多样，但编译理应与配置区配开来，不需要再进行相似的配置，理想情况只需一个 make 即可
-循环依赖最近升级opensource模块，遇到一个很有趣的情况，需要编译的模块如下：
-
-openssl
-libssh2
-curl
-
-正常">
+<meta name="twitter:description" content="这篇文章主要记录下在openssl和一些依赖ssl的应用程序的编译过程中，遇到的一些问题和和思考。 一个原则通常源代码编译应该是只包含3个步骤  配置 编译 部署  配置多种多样，但编译理应与配置区配开来，不需要再进行相似的配置，理想情况只需一个 make 即可 循环依赖最近升级opensource模块，遇到一个很有趣的情况，需要编译的模块如下：  openssl libssh2 curl  正常">
   
     <link rel="alternate" href="/atom.xml" title="F." type="application/atom+xml">
   
@@ -69,7 +29,7 @@ curl
   
   <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
 <body>
   <div id="container">
     <div id="wrap">
@@ -104,13 +64,13 @@ curl
         <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
       </nav>
       <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tmc1900.com"></form>
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.tmc1900.com"></form>
       </div>
     </div>
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-open-build" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-open-build" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/open-build/" class="article-date">
   <time datetime="2016-10-30T11:36:52.000Z" itemprop="datePublished">2016-10-30</time>
@@ -147,56 +107,56 @@ curl
 <li>curl</li>
 </ul>
 <p>正常情况的依赖关系是这样的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">curl +-&gt; libssh2 +-&gt; openssl</div><div class="line">  +--------------------^</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl +-&gt; libssh2 +-&gt; openssl</span><br><span class="line">  +--------------------^</span><br></pre></td></tr></table></figure>
 <p>然而引用的 openssl-1.0.1h-cmp 开源模块在默认配置下造成了如下的依赖关系：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">curl +-&gt; libssh2 +-&gt; openssl</div><div class="line">  ^--------------------^</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl +-&gt; libssh2 +-&gt; openssl</span><br><span class="line">  ^--------------------^</span><br></pre></td></tr></table></figure>
 <p>这样在编译 curl 时，会产生一个很微妙的问题，先编译的 openssl 由于在一开始只是编译库而没有链接可执行文件，所以没有问题，但是到了链接 curl 时，会报出在libssl里找不到 libcurl 的接口为定义的问题，也就是说 curl 自己来依赖一个自己还没有编译出来的自己的接口的循环依赖问题！</p>
 <p>所以依赖管理对于多模块的项目是是很重要的，对于 openssl-1.0.1h-cmp 模块依赖 curl 的选项本来就不应该提供，所以默认不要去打开就可以了。</p>
-<h2 id="源代码获取"><a href="#源代码获取" class="headerlink" title="源代码获取"></a>源代码获取</h2><h3 id="openssl"><a href="#openssl" class="headerlink" title="openssl"></a>openssl</h3><p><a href="https://www.openssl.org/source/" target="_blank" rel="external">https://www.openssl.org/source/</a></p>
+<h2 id="源代码获取"><a href="#源代码获取" class="headerlink" title="源代码获取"></a>源代码获取</h2><h3 id="openssl"><a href="#openssl" class="headerlink" title="openssl"></a>openssl</h3><p><a href="https://www.openssl.org/source/" target="_blank" rel="noopener">https://www.openssl.org/source/</a></p>
 <p>下载 openssl-1.1.0c.tar.gz</p>
-<p>另外，有依赖问题的cmp版本openssl源自 <a href="https://sourceforge.net/projects/cmpforopenssl/" target="_blank" rel="external">cmpforopenssl</a> 项目</p>
+<p>另外，有依赖问题的cmp版本openssl源自 <a href="https://sourceforge.net/projects/cmpforopenssl/" target="_blank" rel="noopener">cmpforopenssl</a> 项目</p>
 <p>因为是svn项目，用svn检出</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ svn checkout http://svn.code.sf.net/p/cmpforopenssl/code/src/openssl-1.0.1h-cmp</div><div class="line"></div><div class="line">$ svn info</div><div class="line">Last Changed Rev: 782</div><div class="line">Last Changed Date: 2016-10-28 17:04:07 +0800 (Fri, 28 Oct 2016)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ svn checkout http://svn.code.sf.net/p/cmpforopenssl/code/src/openssl-1.0.1h-cmp</span><br><span class="line"></span><br><span class="line">$ svn info</span><br><span class="line">Last Changed Rev: 782</span><br><span class="line">Last Changed Date: 2016-10-28 17:04:07 +0800 (Fri, 28 Oct 2016)</span><br></pre></td></tr></table></figure>
 <p>编译前先保证svn仓库的清爽</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ svn revert -R .</div><div class="line">$ svn status | grep &quot;^? &quot; | awk &apos;&#123;print $2&#125;&apos; | xargs rm -rf</div></pre></td></tr></table></figure>
-<h3 id="libssh2"><a href="#libssh2" class="headerlink" title="libssh2"></a>libssh2</h3><p><a href="https://www.libssh2.org/download/" target="_blank" rel="external">https://www.libssh2.org/download/</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ svn revert -R .</span><br><span class="line">$ svn status | grep &quot;^? &quot; | awk &apos;&#123;print $2&#125;&apos; | xargs rm -rf</span><br></pre></td></tr></table></figure>
+<h3 id="libssh2"><a href="#libssh2" class="headerlink" title="libssh2"></a>libssh2</h3><p><a href="https://www.libssh2.org/download/" target="_blank" rel="noopener">https://www.libssh2.org/download/</a></p>
 <p>下载 libssh2-1.7.0.tar.gz</p>
-<h3 id="curl"><a href="#curl" class="headerlink" title="curl"></a>curl</h3><p><a href="https://curl.haxx.se/download/" target="_blank" rel="external">https://curl.haxx.se/download/</a></p>
+<h3 id="curl"><a href="#curl" class="headerlink" title="curl"></a>curl</h3><p><a href="https://curl.haxx.se/download/" target="_blank" rel="noopener">https://curl.haxx.se/download/</a></p>
 <p>下载 curl-7.50.3.tar.gz</p>
 <h2 id="源代码编译"><a href="#源代码编译" class="headerlink" title="源代码编译"></a>源代码编译</h2><h3 id="toolchain"><a href="#toolchain" class="headerlink" title="toolchain"></a>toolchain</h3><p>交叉编译工具版本</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ arm-none-linux-gnueabi-gcc -v</div><div class="line">gcc version 4.8.1 (Sourcery CodeBench Lite 2013.11-33)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ arm-none-linux-gnueabi-gcc -v</span><br><span class="line">gcc version 4.8.1 (Sourcery CodeBench Lite 2013.11-33)</span><br></pre></td></tr></table></figure>
 <h3 id="编译openssl"><a href="#编译openssl" class="headerlink" title="编译openssl"></a>编译openssl</h3><p>openssl 采用了自有的编译脚本，而非GNU标准的 configure 配置脚本<br>另外，这里指定了一下 linux-generic32 的目标，为了在64位系统上编译32位的可执行程序</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ export CROSS_COMPILE=arm-none-linux-gnueabi-</div><div class="line">$ ./Configure linux-generic32 no-asm shared --prefix=$HOME/opt/openssl</div><div class="line">$ make update</div><div class="line">$ make</div><div class="line">$ make install</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ export CROSS_COMPILE=arm-none-linux-gnueabi-</span><br><span class="line">$ ./Configure linux-generic32 no-asm shared --prefix=$HOME/opt/openssl</span><br><span class="line">$ make update</span><br><span class="line">$ make</span><br><span class="line">$ make install</span><br></pre></td></tr></table></figure>
 <p>如果没有一开始export，那么就要这样编译</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ make MAKEDEPPROG=arm-none-linux-gnueabi-gcc update</div><div class="line">$ make CROSS_COMPILE=arm-none-linux-gnueabi-</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ make MAKEDEPPROG=arm-none-linux-gnueabi-gcc update</span><br><span class="line">$ make CROSS_COMPILE=arm-none-linux-gnueabi-</span><br></pre></td></tr></table></figure>
 <p>这里其实有个问题，执行完 config 可以看到 CC=gcc，在 make 时通过 CROSS_COMPILE=arm-none-linux-gnueabi- 这个“常用”变量来添加交叉编译前缀，这样多少导致“配置”的内容让“编译”步骤又配置了一次<br>其实，在官方的 openssl-1.1.x 版本开始已经支持 –cross-compile-prefix 参数来指定交叉编译器版本</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ./Configure linux-generic32 no-asm shared --prefix=$HOME/opt/openssl --cross-compile-prefix=arm-none-linux-gnueabi-</div><div class="line">$ make</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ./Configure linux-generic32 no-asm shared --prefix=$HOME/opt/openssl --cross-compile-prefix=arm-none-linux-gnueabi-</span><br><span class="line">$ make</span><br></pre></td></tr></table></figure>
 <h3 id="libssh"><a href="#libssh" class="headerlink" title="libssh"></a>libssh</h3><p>来到libssh，总算回到了标准GNU工具automake自动生成的 configure 脚本，交叉编译都是通过经典的 –host 等参数指定</p>
 <p>这里本想使libssh安装到和openssl不同的路径进行配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ./configure --prefix=$HOME/opt/libssh --host=arm-none-linux-gnueabi --with-openssl --with-libssl-prefix=$HOME/opt/openssl --disable-examples-build</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./configure --prefix=$HOME/opt/libssh --host=arm-none-linux-gnueabi --with-openssl --with-libssl-prefix=$HOME/opt/openssl --disable-examples-build</span><br></pre></td></tr></table></figure>
 <p>但在编译时出现了问题</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">$ make</div><div class="line">  CCLD     libssh2.la</div><div class="line">make[2]: Leaving directory `/home/ubuntu/git/libssh2-1.7.0/src&apos;</div><div class="line">make[1]: Leaving directory `/home/ubuntu/git/libssh2-1.7.0/src&apos;</div><div class="line">Making all in tests</div><div class="line">make[1]: Entering directory `/home/ubuntu/git/libssh2-1.7.0/tests&apos;</div><div class="line">  CC       ssh2.o</div><div class="line">  CCLD     ssh2</div><div class="line">/home/ubuntu/opt/arm-2013.11/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: warning: libssl.so.1.0.0, needed by ../src/.libs/libssh2.so, not found (try using -rpath or -rpath-link)</div><div class="line">/home/ubuntu/opt/arm-2013.11/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: warning: libcrypto.so.1.0.0, needed by ../src/.libs/libssh2.so, not found (try using -rpath or -rpath-link)</div><div class="line">../src/.libs/libssh2.so: undefined reference to `BN_rand&apos;</div><div class="line">../src/.libs/libssh2.so: undefined reference to `EVP_CipherInit&apos;</div><div class="line">../src/.libs/libssh2.so: undefined reference to `BN_set_word&apos;</div><div class="line">../src/.libs/libssh2.so: undefined reference to `EVP_PKEY_get1_DSA&apos;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ make</span><br><span class="line">  CCLD     libssh2.la</span><br><span class="line">make[2]: Leaving directory `/home/ubuntu/git/libssh2-1.7.0/src&apos;</span><br><span class="line">make[1]: Leaving directory `/home/ubuntu/git/libssh2-1.7.0/src&apos;</span><br><span class="line">Making all in tests</span><br><span class="line">make[1]: Entering directory `/home/ubuntu/git/libssh2-1.7.0/tests&apos;</span><br><span class="line">  CC       ssh2.o</span><br><span class="line">  CCLD     ssh2</span><br><span class="line">/home/ubuntu/opt/arm-2013.11/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: warning: libssl.so.1.0.0, needed by ../src/.libs/libssh2.so, not found (try using -rpath or -rpath-link)</span><br><span class="line">/home/ubuntu/opt/arm-2013.11/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: warning: libcrypto.so.1.0.0, needed by ../src/.libs/libssh2.so, not found (try using -rpath or -rpath-link)</span><br><span class="line">../src/.libs/libssh2.so: undefined reference to `BN_rand&apos;</span><br><span class="line">../src/.libs/libssh2.so: undefined reference to `EVP_CipherInit&apos;</span><br><span class="line">../src/.libs/libssh2.so: undefined reference to `BN_set_word&apos;</span><br><span class="line">../src/.libs/libssh2.so: undefined reference to `EVP_PKEY_get1_DSA&apos;</span><br></pre></td></tr></table></figure>
 <p>这里根据提示 <code>try using -rpath or -rpath-link</code> 来补充些 LDFLAGS 变量</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ make LDFLAGS=-R$HOME/opt/openssl/lib</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ make LDFLAGS=-R$HOME/opt/openssl/lib</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>注意：虽然这样可以编译通过，但是会带来另外的问题（下面再展开讨论）</p>
 </blockquote>
 <p>再次为了避免 make 使用额外的参数，调整一下 –prefix 参数使用和 openssl 一样的路径配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ ./configure --prefix=$HOME/opt/openssl --host=arm-none-linux-gnueabi --with-openssl --with-libssl-prefix=$HOME/opt/openssl --disable-examples-build</div><div class="line">$ make</div><div class="line">$ make install</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ./configure --prefix=$HOME/opt/openssl --host=arm-none-linux-gnueabi --with-openssl --with-libssl-prefix=$HOME/opt/openssl --disable-examples-build</span><br><span class="line">$ make</span><br><span class="line">$ make install</span><br></pre></td></tr></table></figure>
 <h3 id="curl-1"><a href="#curl-1" class="headerlink" title="curl"></a>curl</h3><p>这里继续配置相同的安装路径，避免最后链接 curl 时找不到库路径的问题<br>编译部署完成后，在 $HOME/opt/openssl 的bin目录下终于能看了一个可执行的 curl 程序 :)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ ./configure --prefix=$HOME/opt/openssl --host=arm-none-linux-gnueabi --with-ssl=$HOME/opt/openssl --with-libssh2=$HOME/opt/openssl</div><div class="line">$ make</div><div class="line">$ make install</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ./configure --prefix=$HOME/opt/openssl --host=arm-none-linux-gnueabi --with-ssl=$HOME/opt/openssl --with-libssh2=$HOME/opt/openssl</span><br><span class="line">$ make</span><br><span class="line">$ make install</span><br></pre></td></tr></table></figure>
 <p>最后，通过 readelf 来观察一下 curl 的库依赖情况</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ arm-none-linux-gnueabi-readelf -d bin/curl</div><div class="line">Dynamic section at offset 0x44698 contains 29 entries:</div><div class="line">  Tag        Type                         Name/Value</div><div class="line"> 0x00000001 (NEEDED)                     Shared library: [libcurl.so.4]</div><div class="line"> 0x00000001 (NEEDED)                     Shared library: [libssl.so.1.0.0]</div><div class="line"> 0x00000001 (NEEDED)                     Shared library: [libcrypto.so.1.0.0]</div><div class="line"> 0x00000001 (NEEDED)                     Shared library: [libgcc_s.so.1]</div><div class="line"> 0x00000001 (NEEDED)                     Shared library: [libc.so.6]</div><div class="line"> 0x0000000f (RPATH)                      Library rpath: [/home/ubuntu/opt/openssl/lib]</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ arm-none-linux-gnueabi-readelf -d bin/curl</span><br><span class="line">Dynamic section at offset 0x44698 contains 29 entries:</span><br><span class="line">  Tag        Type                         Name/Value</span><br><span class="line"> 0x00000001 (NEEDED)                     Shared library: [libcurl.so.4]</span><br><span class="line"> 0x00000001 (NEEDED)                     Shared library: [libssl.so.1.0.0]</span><br><span class="line"> 0x00000001 (NEEDED)                     Shared library: [libcrypto.so.1.0.0]</span><br><span class="line"> 0x00000001 (NEEDED)                     Shared library: [libgcc_s.so.1]</span><br><span class="line"> 0x00000001 (NEEDED)                     Shared library: [libc.so.6]</span><br><span class="line"> 0x0000000f (RPATH)                      Library rpath: [/home/ubuntu/opt/openssl/lib]</span><br></pre></td></tr></table></figure>
 <p>重点注意 RPATH Library rpath: [/home/ubuntu/opt/openssl/lib] 的内容，这里如果是编译本机运行的程序是没有问题的，但是在交叉编译的情境下多多少少就会有不合理的地方<br>因为 /home/ubuntu/opt/openssl/lib 的路径是编译机的路径，而部署到目标机上可能根本就不存在这样的目录<br>所以，回过来看 make install 其实还不是真正的“部署”，configure 脚本还差一个指定目标机运行时库路径的参数，automake工具（更准确说是gcc工具链）直接的把编译时指定的路径用作运行时路径是不够的。</p>
 <h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>其实，编译 opensource 模块本身并不困难，真正的挑战在于将这些模块整合进自己的项目中，并且要一起构建整个项目群时，才会遇到超出 automake 工具能解决的问题。由于 configure 一般要求依赖模块已经存在，这就导致需要在编译一个模块前先 make 依赖的模块，最后总的 makefile 很可能就变成了一个 makefile.sh 的形式。这时考验这个 makescript 的一个关键就是是否会在每次 make 时都需要重新 configure 了。<br>当然，将模块在外部 configure 后再加入项目版本控制肯定是不推荐的，比较好的方法是采用 prebuilt 预编译管理开源模块。<br>另外，关于 make install 又有个问题就是 make 一个模块 install 一个，还是最后统一遍历 install 呢？对此就保留下建议了。<br>总之，没有最好的方法，切合自身项目的构建需要才是最重要的，而且如果编译能做到尽可能优化最终节省的还是整个 team 的时间。<br>这次先总结到这里，欢迎留言讨论指正。</p>
 <hr>
 <p><strong>版权声明</strong></p>
-<p>作者: <a href="https://blog.tmc1900.com/about">Marcus Tang</a><br>许可证: <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" target="_blank" rel="external">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a><br>License: <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="external">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><br>本文永久链接: <a href="https://blog.tmc1900.com/open-build/">https://blog.tmc1900.com/open-build/</a></p>
+<p>作者: <a href="https://blog.tmc1900.com/about">Marcus Tang</a><br>许可证: <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" target="_blank" rel="noopener">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a><br>License: <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><br>本文永久链接: <a href="https://blog.tmc1900.com/open-build/">https://blog.tmc1900.com/open-build/</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tmc1900.com/open-build/" data-id="cjp110qek0008a7rkauf9i6z4" class="article-share-link">Share</a>
+      <a data-url="https://blog.tmc1900.com/open-build/" data-id="cjp11oykl0006gsrkxq4bihoi" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/build/">build</a></li></ul>
