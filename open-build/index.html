@@ -6,7 +6,7 @@
 
   
   <title>opensource 的循环依赖 | F.</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="这篇文章主要记录下在openssl和一些依赖ssl的应用程序的编译过程中，遇到的一些问题和和思考。 一个原则通常源代码编译应该是只包含3个步骤  配置 编译 部署  配置多种多样，但编译理应与配置区配开来，不需要再进行相似的配置，理想情况只需一个 make 即可 循环依赖最近升级opensource模块，遇到一个很有趣的情况，需要编译的模块如下：  openssl libssh2 curl  正常">
 <meta name="keywords" content="build">
 <meta property="og:type" content="article">
@@ -156,7 +156,8 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tmc1900.com/open-build/" data-id="cjp11oykl0006gsrkxq4bihoi" class="article-share-link">Share</a>
+      <a data-url="https://blog.tmc1900.com/open-build/" data-id="cjp2pzkuh0009brrkmv8eve1m" class="article-share-link">Share</a>
+      
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/build/">build</a></li></ul>
@@ -186,6 +187,7 @@
 
   
 </article>
+
 
 
 </section>
@@ -263,7 +265,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2018 Marcus Tang<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
       <p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
     </div>
   </div>
@@ -289,6 +291,7 @@
 
 
 <script src="/js/script.js"></script>
+
 
 
 
