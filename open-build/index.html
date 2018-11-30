@@ -5,6 +5,18 @@
   
 
   
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?c8ebd7a17ad43f5b217843e8e0876fef";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+  
   <title>opensource 的循环依赖 | F.</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="这篇文章主要记录下在openssl和一些依赖ssl的应用程序的编译过程中，遇到的一些问题和和思考。 一个原则通常源代码编译应该是只包含3个步骤  配置 编译 部署  配置多种多样，但编译理应与配置区配开来，不需要再进行相似的配置，理想情况只需一个 make 即可 循环依赖最近升级opensource模块，遇到一个很有趣的情况，需要编译的模块如下：  openssl libssh2 curl  正常">
@@ -156,7 +168,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.tmc1900.com/open-build/" data-id="cjp2pzkuh0009brrkmv8eve1m" class="article-share-link">Share</a>
+      <a data-url="https://blog.tmc1900.com/open-build/" data-id="cjp3v59nl0009torkjq3jflrd" class="article-share-link">Share</a>
       
       
       
@@ -201,7 +213,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/build/">build</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/program/">program</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/build/">build</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/program/">program</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -220,7 +232,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
