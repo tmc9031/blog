@@ -208,6 +208,383 @@
   </entry>
   
   <entry>
+    <title>SCM for git-repo</title>
+    <link href="https://blog.tmc1900.com/scm-repo/"/>
+    <id>https://blog.tmc1900.com/scm-repo/</id>
+    <published>2015-03-15T10:00:00.000Z</published>
+    <updated>2015-03-15T10:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Git-复合工程的-SCM-计划方案"><a href="#Git-复合工程的-SCM-计划方案" class="headerlink" title="Git 复合工程的 SCM 计划方案"></a>Git 复合工程的 SCM 计划方案</h1><p>Author</p>
+<ul>
+<li>Marcus Tang</li>
+<li>tmc9031@gmail.com</li>
+</ul>
+<h2 id="开发模式"><a href="#开发模式" class="headerlink" title="开发模式"></a>开发模式</h2><h3 id="现状分析"><a href="#现状分析" class="headerlink" title="现状分析"></a>现状分析</h3><p>现有的大型软件项目是由不同相对独立的模块组合而成，而不是单一的个体。而开发模式，一般是基于产品，即一个产品的项目开始和结束，通常会经过“软件资源的汇聚，修正，再稳定”几个过程。</p>
+<p>然后，再一个新的产品需要推出，又要重复这一过程。当然，如果这一循环是相互无关的，那没有问题；但是，往往新产品是基于原有项目的提高改进，并且在同一时间新旧产品往往还需要同时维护，会导致软件资源的分离和不可控制。</p>
+<p>如果，这个循环的次数越多，每次软件资源的汇聚，都代表着共有资源的分散，也就是说它们无法稳固在一个单纯的状态里以持续的改进，同时开发人员无法确切知道这些共有资源在不同项目产品之间的差异是什么，并且每次都在从头开始，降低了软件开发的效率</p>
+<h3 id="改进意见"><a href="#改进意见" class="headerlink" title="改进意见"></a>改进意见</h3><p>总之，现有部署中一般是以开发的设备产品为单位建立软件仓库的，所以我们需要另一种方式，来提高共有软件资源的利用率。</p>
+<p>基于以上讨论，可以从每个软件资源的角度进行汇聚，以达到网络设备由独立的模块组合而成的特点。</p>
+<p>建议，引入开源的repo管理工具，把设备产品为单位的项目拆分为软件资源为单位的独立仓库，并用xml的标记方式把软件仓库组合为设备产品。开发人员就可以通过repo管理工具获取到设备产品的所有仓库集合。</p>
+<p>以下是使用repo管理公共模块和独立模块组合成项目产品的开发模型：</p>
+<pre><code>公共模块:        c1    c2    c3
+                |    /  \   |  \
+                |   /    \  |   \
+[项目产品]:      td-s     td-l    fdd
+                |          |      |
+独立模块:        s1        s2     s3
+</code></pre><p>另外，repo需要与版本控制工具git进行配套使用。git与在使用的svn对比有一些使用上的差异，但是git有许多先进的特性，所以使用repo+git也是现有条件下最优的选择。</p>
+<h2 id="审核模式"><a href="#审核模式" class="headerlink" title="审核模式"></a>审核模式</h2><h3 id="现状分析-1"><a href="#现状分析-1" class="headerlink" title="现状分析"></a>现状分析</h3><p>现有在软件开发的审核阶段（即code review），使用的是reviewboard的web服务</p>
+<p>网络架构</p>
+<pre><code>软件仓库（SVN服务） &lt;&lt;---  reviewboard审核web服务
+    |       ^            ^
+    |       |           /
+    |       |          /
+    V       |         /
+    开发人员（SVN工具）
+</code></pre><p>开发人员把仓库的修改结果先提交到reviewboard上，leader再二次确认，就可以提交入库。但是，这个流程里有许多漏洞和问题：</p>
+<ul>
+<li>rb与软件仓库并没有有实质上的关联，仓库的读写权限并不都它控制，也就是说开发人员也可以直接推送修改入库</li>
+<li>rb不支持二进制文件的提交，开发人员只能采取直接推送入库</li>
+<li>rb并不能保留Linux系统的其中一个文件属性“可执行”，实际开发中，常常发现修改结果没有达到预期都与该问题有关，并且解决方法也是直接推送入库（这也助长了开发人员绕过审核的可能）</li>
+<li>rb根本不能保留svn merge的合并信息，并且svn status里add状态的文件，经过post-review命令不会产生补丁文件提交</li>
+</ul>
+<h3 id="改进意见-1"><a href="#改进意见-1" class="headerlink" title="改进意见"></a>改进意见</h3><p>所以，为了提高开发中对软件仓库的监管，建议引入gerrit的web服务，它对于软件修改的审核是全面和强制性的。</p>
+<p>开发人员的提交必须通过leader在gerrit的web上审核通过，才可以入库。以避免使用reviewboard审核服务过程中，一些弥补问题的中间操作给软件仓库和测试验证带来的影响。</p>
+<h2 id="整个改进方案"><a href="#整个改进方案" class="headerlink" title="整个改进方案"></a>整个改进方案</h2><p>所需资源清单</p>
+<ul>
+<li>Git版本控制工具</li>
+<li>Repo仓库管理工具</li>
+<li>Gerrit代码审核服务</li>
+<li>Jenkins自动构建服务【可选】</li>
+</ul>
+<h3 id="部署架构"><a href="#部署架构" class="headerlink" title="部署架构"></a>部署架构</h3><p>网络架构</p>
+<pre><code>Gerrit仓库+审核服务（sshd服务）  ---&gt;&gt;   Git备份仓库【可选】
+    |       ^
+    |       |
+    |       |
+    V       |
+开发人员（Repo+Git工具）
+</code></pre><p>简要流程</p>
+<ol>
+<li>Gerrit服务器本身就保存着git仓库，同时可以再简单配置镜像服务器以备份git仓库</li>
+<li>管理员通过webUI配置这些git仓库的访问权限</li>
+<li>Gerrit通过内置的sshd服务提供client端获取代码</li>
+<li>client端本地修改后推送至Gerrit服务器进行code review，通过后直接入库</li>
+</ol>
+<p>部署优势</p>
+<p>架构简单，可靠<br>集成了仓库管理，权限配置，代码审核并入库等功能</p>
+<h3 id="工作流对比"><a href="#工作流对比" class="headerlink" title="工作流对比"></a>工作流对比</h3><p>开发人员简要流程</p>
+<p>初始化manifest.git清单库</p>
+<pre><code>$ repo init -b &lt;branch&gt;
+</code></pre><p>依据manifest.xml清单来clone所有git库</p>
+<pre><code>$ repo sync
+</code></pre><p>新建本地分支，开始工作</p>
+<pre><code>cd &lt;work_dir&gt;
+$ repo start &lt;branch&gt; .
+</code></pre><p>任务完成后，本地提交</p>
+<pre><code>vim &lt;source_code&gt;
+$ git commit -a
+</code></pre><p>推送review</p>
+<pre><code>$ repo upload
+</code></pre><p>拉取更新update（与依据xml清单clone命令相同）</p>
+<pre><code>$ repo sync
+</code></pre><h3 id="迁移问题"><a href="#迁移问题" class="headerlink" title="迁移问题"></a>迁移问题</h3><h2 id="版本控制工具对比"><a href="#版本控制工具对比" class="headerlink" title="版本控制工具对比"></a>版本控制工具对比</h2><h3 id="SVN"><a href="#SVN" class="headerlink" title="SVN"></a>SVN</h3><p><strong>特点</strong></p>
+<p>To：self</p>
+<p>目录树式的版本控制，基于最新version开发<br>version信息存储在每个子目录的.svn文件夹</p>
+<p>To：developer</p>
+<p>本地操作符合一般的思维，即：checkout版本，本地修改，checkin修改</p>
+<p><strong>问题</strong></p>
+<p>To：leader</p>
+<p>只关心最新版本，但一般最新version是不稳定的，导致开发团队受到不可预知的干扰，影响任务进度<br>即便最新version看上去是”干净的”，但往往历史是通过添加和删除构成的，难以回溯<br>项目有必要的上游更新时，很难在最新version上合并改动，延误响应时效<br>使用的SVN的场景，新项目立项时，需要重用原项目的某些模块，很难导入它们的历史，只能是对应最新version的某一快照</p>
+<p>To：developer</p>
+<p>虽然允许子目录下svn update，但会使本地version处于一个无法确定的状态<br>如果任务有并发，本地修改的状态往往会相互干扰，分离困难<br>尤其review阶段，本地修改的状态要保持住，才能避免review不通过继续修改时受到其他代码改动干扰的情况，这样也阻碍了任务并发<br>常常无法确认的本地version状态，采取重新checkout版本的方法，时间代价高<br>协同开发切换branch时，开发人员一次删除本地version再重新检出，并回到工作状态就可能半天过去了<br>当svn的不同分支需要相同的提交时，只能手动修改再提交，并且一定时间后很难确认是否一个分支包含了某次改动，除非还是手动打开原文件确认</p>
+<h3 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h3><p><strong>特点</strong></p>
+<p>To：self</p>
+<p>内容式的版本控制，基于repository历史开发<br>repository信息仅仅存储在一个项目根目录的.git文件夹<br>特有的stage暂存区，有利于抽出需要提交的差异，避免编译结果进入版本控制等</p>
+<p>To：admin</p>
+<p>创建和删除branch代价几乎为0，不会对repository服务器带来过多存储负担</p>
+<p>To：developer</p>
+<p>本地就是repository，可以游走于任意的版本<br>只有创建本地branch，可以分离不同任务的修改状态</p>
+<p><strong>问题</strong></p>
+<p>To：developer</p>
+<p>操作灵活多样，起初使用时，可能并不清楚git工具对本地repository做了什么<br>本地repository操作时，要同时考虑到可能带来的影响，但这让repository变得可控</p>
+<h2 id="情景分析及工作流示例"><a href="#情景分析及工作流示例" class="headerlink" title="情景分析及工作流示例"></a>情景分析及工作流示例</h2><h3 id="注册用户"><a href="#注册用户" class="headerlink" title="注册用户"></a>注册用户</h3><p>To：admin</p>
+<p>gerrit采用http认证模式</p>
+<p>管理员注册流程</p>
+<pre><code>$ htpasswd ~/review_site/etc/http.passwd admin
+# 登录gerrit页面，添加ssh公钥，点击continue
+$ ssh g2admin gerrit set-account admin --add-email admin@example.com --full-name admin@example.com
+</code></pre><p>开发人员注册流程</p>
+<pre><code>[管理员操作]
+$ htpasswd ~/review_site/etc/http.passwd user1
+# 登录gerrit页面，直接点击continue，仅完成账号激活
+$ ssh g2admin gerrit set-account user1 --add-email user1@example.com --full-name user1
+
+[开发人员操作]
+$ ssh-keygen    # 在本机生成ssh密钥和公钥
+# 从管理员获取http账号密码，登录gerrit页面，添加ssh公钥，即可
+</code></pre><h3 id="新建仓库"><a href="#新建仓库" class="headerlink" title="新建仓库"></a>新建仓库</h3><p>To：admin</p>
+<h3 id="导入现有仓库"><a href="#导入现有仓库" class="headerlink" title="导入现有仓库"></a>导入现有仓库</h3><p>To：admin</p>
+<h3 id="仓库权限配置"><a href="#仓库权限配置" class="headerlink" title="仓库权限配置"></a>仓库权限配置</h3><p>To：admin+leader</p>
+<p>Need：</p>
+<p>一般的职能构成是一个部门由几个小组，没有小组有一位leader<br>需要配置哪些project只能由哪个小组可以访问，并且哪些project可以由几个小组可以访问<br>这些访问关系只能有一位部门管理员统一配置</p>
+<p>Support：</p>
+<p>项目层面采用access权限列表</p>
+<p>支持project的权限继承自指定的ACL（未指定使用默认）<br>支持ACL之间的继承，特殊情况可以设置exclusive标志覆写继承的权限</p>
+<p>用户层面采用group组管理权限</p>
+<p>支持指定某些成员为一个group<br>支持设置group的所属关系，Owner可以添加删除组成员<br>支持设置group的包含关系，grpCD1，grpCD2等可以同时属于grpCD，然后grpCD和grpPD又可以同时属于grpALL</p>
+<p>Example：</p>
+<p>基本思路</p>
+<p>指定多个user为group，在project的ACL里添加group的所需权限，避免为单独用户修改project的ACL<br>尽量不修改project的ACL，而是使用ACL的继承关系定义好一些预制的group，使权限需求相同的project继承自该ACL模板即可</p>
+<p>admin可以把一个部门的开发人员定义为一个group，再在相关的project为该group打开read访问权限</p>
+<p>配置core开发人员组的附加权限</p>
+<pre><code>Reference:     refs/heads/*
+Create Reference
+Push        # opensource only
+
+Reference:     refs/tags/*
+Push Annotated Tag
+</code></pre><p>预配置权限的工程模板</p>
+<pre><code>$ cat groups
+# UUID                                      Group Name
+#
+00ea643    leaderA
+8495079    coreA
+9163180    grpA
+
+$ cat project.config
+[submit]
+    action = fast forward only
+[access &quot;refs/*&quot;]
+    owner = group leaderA
+    read = group grpA
+[access &quot;refs/heads/*&quot;]
+    create = group coreA
+[access &quot;refs/tags/*&quot;]
+    pushTag = group coreA
+</code></pre><h3 id="邮件系统整合"><a href="#邮件系统整合" class="headerlink" title="邮件系统整合"></a>邮件系统整合</h3><p>To：admin</p>
+<p>Need：</p>
+<p>针对一组project设定email通知的用户组<br>开发人员upload提交后，自动触发一组project预配置好的用户组/用户进行review<br>另外，开发人员在必要的时候，也可以自定义email通知和review事件</p>
+<p>Example：</p>
+<p>email通知</p>
+<p>工程级别的配置</p>
+<pre><code>$ vim project.config
+[notify &quot;leaderA&quot;]
+    email = group leaderA
+</code></pre><p>review事件</p>
+<p>开发人员手动添加review人员</p>
+<p>开发人员自己upload提交后，添加leader组到”Need Code-Review”列表，然后点击”Publish Comments”，即可进入review人员的”Incoming reviews”列表</p>
+<p>审核人员手动成为review人员</p>
+<p>处于open状态的提交，任何人有权限进行review的，就会自动成为该次提交的Reviewer，并进入”Incoming reviews”列表</p>
+<p>repo配合review</p>
+<p>开发人员配置本机repo upload时，默认的review人员（仅uplaod时生效）</p>
+<pre><code>$ git config --global review.&lt;review_url&gt;.autoreviewer &lt;lead_name&gt;
+</code></pre><p>开发人员每次repo upload时，手动指定review人员</p>
+<pre><code>$ repo upload --reviewers=&lt;lead_name&gt; [--cc=&lt;other_email&gt;]
+</code></pre><p>开发人员已经upload后，通过ssh命令添加review人员（或者在web页面添加）</p>
+<pre><code>$ ssh g2user1 gerrit set-reviewers &lt;Change-Id&gt; --add &lt;lead_name&gt;|&lt;group_name&gt;
+</code></pre><p>review与email</p>
+<ul>
+<li>提交者一旦添加review人员，就会发email通知该review人员，提交者Abandoned这次提交同样会通知该review人员</li>
+<li>该review人员的review动作，也会触发email给提交者和其他review人员</li>
+<li>默认review动作不会发email给自己，可以在”Settings -&gt; Preferences -&gt; CC Me On Comments I Write”勾选配置抄送给自己</li>
+</ul>
+<h3 id="获取仓库"><a href="#获取仓库" class="headerlink" title="获取仓库"></a>获取仓库</h3><p>To：developer</p>
+<p>Example：</p>
+<p>初始化repo清单列表，获取manifest.git库到当前目录的.repo目录下</p>
+<pre><code>$ repo init --manifest-url=ssh://user2@gerrit-vm:29418/project/manifest.git --no-repo-verify --repo-url=file:///home/gerrit/repo/git-repo --repo-branch=stable
+</code></pre><p>获取repo清单列表上所有的git库</p>
+<pre><code>$ repo sync
+</code></pre><p>更新repo清单列表，以下命令都会自动触发获取manifest.git库</p>
+<pre><code>$ repo init
+or
+$ repo sync
+</code></pre><h3 id="本地仓库开发"><a href="#本地仓库开发" class="headerlink" title="本地仓库开发"></a>本地仓库开发</h3><p>To：developer</p>
+<p>Need：</p>
+<p>一般针对单个git库的需要，repo都要能有对应的命令实现</p>
+<ul>
+<li>创建分支</li>
+<li>显示当前所处分支</li>
+<li>切换分支</li>
+<li>当前分支的修改与repo仓库对应分支版本的差异，类似status和diff</li>
+<li>当前分支的所有的超前提交与repo仓库对应分支版本的差异，类似指定diff的分支引用</li>
+<li>保留本地修改，拉取更新，类似fetch和pull</li>
+<li>回到repo仓库的某个tag状态</li>
+<li>显示repo仓库的不同tag之间的差异</li>
+</ul>
+<p>Example：</p>
+<p>repo sync结束后，默认没有本地branch，需要根据xml的标记来创建本地branch，开始工作</p>
+<pre><code>$ repo start &lt;branch&gt; --all
+</code></pre><p>显示当前所处分支</p>
+<pre><code>$ repo branch
+or
+$ repo info
+</code></pre><blockquote>
+<p>注意：避免分支杂乱的情况，可能以为在统一的分支，其实某个git库在一个其它的本地分支上<br>repo branch会显示所有的分支引用，所以命令返回的信息有重叠现象</p>
+</blockquote>
+<p>切换分支</p>
+<pre><code>$ repo checkout &lt;branchname&gt; [&lt;project&gt;...]
+or
+$ repo forall [&lt;project&gt;...] -c git checkout &lt;branchname&gt;
+</code></pre><blockquote>
+<p>注意：repo checkout只要有一个project检出成功就不会再提示error信息，所以更适合一开始就是repo start指定的project<br>repo forall -c可以有提示，但无法知道是哪个project，所以需要用repo forall -cpv</p>
+</blockquote>
+<p>分别显示各个项目工作区下的文件差异，基于HEAD引用的提交位置</p>
+<pre><code>$ repo diff [--absolute] [&lt;project&gt;...]     # --absolute是去掉project路径
+or
+$ repo status [--orphans] [&lt;project&gt;...]    # --orphans是显示project以外的差异
+</code></pre><p>当前分支的所有的超前提交与repo仓库对应分支版本的差异，基于跟踪的远程分支</p>
+<pre><code>$ repo overview [--current-branch] [&lt;project&gt;...]
+or
+$ repo info [--diff --local-only] [--overview [--current-branch]] [&lt;project&gt;...]
+</code></pre><p>保留本地修改，拉取更新</p>
+<pre><code>$ repo forall -c git stash
+$ repo sync
+$ repo forall -c git stash pop
+
+[CONFLICT]
+$ repo status       # 查看冲突的project，大写字母&quot;U&quot;
+$ cd &lt;project&gt;      # fix ...
+$ git stash drop    # 手动清理冲突时没有删掉的临时区
+</code></pre><p>回到repo仓库的某个tag状态</p>
+<pre><code>$ repo init -b &lt;tag_branch&gt;
+$ repo sync --local-only [--detach]
+</code></pre><p>显示repo仓库的不同tag之间的差异</p>
+<pre><code>$ repo forall -c git diff --stat refs/tags/&lt;tag_name&gt;
+or
+$ repo diffmanifests manifest1.xml [manifest2.xml] [--raw]
+</code></pre><h3 id="推送提交"><a href="#推送提交" class="headerlink" title="推送提交"></a>推送提交</h3><p>To：developer</p>
+<p>本地修改，局部分支法</p>
+<pre><code>$ repo init -b &lt;fdd-dev&gt;
+$ repo sync --detach
+
+$ cd fdd
+
+$ repo start &lt;fdd-dev&gt; .    # NOTE: symbol &quot;.&quot; mean current dir
+$ repo branch
+*  fdd-dev                   | in fdd
+or
+$ git co -b &lt;fdd-dev&gt; remotes/m/fdd-dev
+$ git branch -vv
+* fdd-dev 4c5d518 [gerrit/fdd-dev] Merge branch &apos;fdd-rel&apos; into fdd-dev
+
+$ vim ...
+$ git ci -a
+    up: make c02
+
+$ repo upload
+</code></pre><p>不等review完成，直接继续同一git库的其它任务</p>
+<pre><code>$ repo start &lt;fdd-dev-b&gt; .    # NOTE: symbol &quot;.&quot; mean current dir
+$ repo branch
+ P fdd-dev                   | in fdd
+*  fdd-dev-b                 | in fdd
+or
+$ git co -b &lt;fdd-dev-b&gt; remotes/m/fdd-dev
+$ git branch -vv
+  fdd-dev   ef9c17e [gerrit/fdd-dev: ahead 1] up: make c02
+* fdd-dev-b 4c5d518 [gerrit/fdd-dev] Merge branch &apos;fdd-rel&apos; into fdd-dev
+
+$ vim ...
+$ git ci -a
+    up: make c03
+$ git branch -vv
+  fdd-dev                ef9c17e [gerrit/fdd-dev: ahead 1] up: make c02
+* fdd-dev-b              c132ecc [gerrit/fdd-dev: ahead 1] up: make c03
+</code></pre><p>等到上次提交的review完成，那么当这次需要upload时，先sync一下</p>
+<pre><code>$ repo sync
+project fdd/
+: git rebase --onto ef9c17e c132ecc^1
+First, rewinding head to replay your work on top of it...
+Applying: up: make c03
+
+$ git branch -vv
+  fdd-dev                ef9c17e [gerrit/fdd-dev] up: make c02
+* fdd-dev-b              5922080 [gerrit/fdd-dev: ahead 1] up: make c03
+
+$ repo upload
+</code></pre><p>清理已经review通过的分支</p>
+<pre><code># 先确认所有分支已经repo upload，即显示分支状态为大写字母&quot;P&quot;
+$ repo branch
+ P fdd-dev                   | in fdd
+ P fdd-dev-b                 | in fdd
+
+# 安全清理prune
+$ repo prune
+
+# 回到无分支状态
+$ repo branch
+   (no branches)
+</code></pre><p>注意事项</p>
+<p>一个分支一次repo upload的提交历史最好只用1个，最多也不要超过3个，由于gerrit需要逐个review<br>同一分支，永远不要用git pull拉取更新，即在本地用merge合并分叉的远程branch来更新，对于远程来说主线HEAD^会倾斜到本地还未push的提交</p>
+<p>提交过合并的节点后，更不可以rebase后再push</p>
+<p>Rei总结</p>
+<p>1) 代码提交者身份</p>
+<p>向远程分支提交代码时，先 git pull –rebase，避免把本地状态当作分支提交。</p>
+<p>2) 分支管理者身份</p>
+<p>进行线上分支合并时，一律使用 git merge –no-ff，保留合并时间戳。</p>
+<h3 id="代码审核"><a href="#代码审核" class="headerlink" title="代码审核"></a>代码审核</h3><p>To：developer+leader</p>
+<p>Submit Type:</p>
+<ul>
+<li>Fast Forward Only   严格的快进，合并只在本地完成</li>
+<li>Merge If Necessary  一般快进，不然就合并</li>
+<li>Rebase If Necessary 一般快进，不然就换基</li>
+</ul>
+<p>服务端的自动Merge类型对于独立的分叉提交可以很好的合并，方便提交者更新本地，但历史不够线性<br>服务端的自动Rebase类型对于独立的分叉提交可以很好的换基，历史线性，但不方便提交者更新本地</p>
+<p>优先review合并提交，并从合并的依赖提交依次review；否则合并提交又因为出现分叉而无法快进时，服务端不管采用哪种Submit类型都无法很好解决，merge会产生多余的合并节点，rebase会丢失合并节点</p>
+<p>持续并行的特性分支，如果需要主动upload一个merge –no-ff的合并节点，建议采用Merge类型，并且review时从依赖提交开始，当已经由于分叉通过服务端自动合并，就abandon提交上来的合并节点即可<br>不过，服务端的自动Merge类型的节点是没有Change-Id也没有显示在评审列表里的，如果需要严格通过本地创建合并节点，还是推荐采用Rebase类型，以保持历史线性<br>另外，持续并行的特性分支情况，还是需要新建branch，再在需要的时候通过本地主线merge特性branch生成的合并节点来upload（测试下来先submit分叉提交会有问题，还是会自动merge，所以只能牢记先review合并提交，不然不得不用ff-only类型？）</p>
+<h3 id="自动构建"><a href="#自动构建" class="headerlink" title="自动构建"></a>自动构建</h3><p>To：developer+leader</p>
+<h3 id="版本发布"><a href="#版本发布" class="headerlink" title="版本发布"></a>版本发布</h3><p>To：developer</p>
+<p>To：leader</p>
+<p>[repo发布流程]</p>
+<p>基于release分支创建tag</p>
+<pre><code>$ repo init -b fdd-rel
+$ repo sync --detach
+[Test OK]
+$ repo forall -cpv &apos;git tag -a fdd-v1.0 -m &quot;release fdd-v1.0&quot;&apos;
+$ repo forall -cpv &apos;git push gerrit --tags&apos;
+</code></pre><p>合并回develop分支</p>
+<pre><code>$ repo checkout fdd-dev
+$ repo forall -cpv &apos;git merge --no-ff fdd-rel&apos;
+$ repo forall -c &apos;git ci --amend&apos;   # NOTE: must operation
+$ repo upload
+</code></pre><p>[manifest发布流程]</p>
+<p>大版本发布</p>
+<pre><code>$ git co fdd-rel
+$ git co -b fdd-v1.0
+$ vim default.xml
+    revision=&quot;refs/heads/fdd-rel&quot; --&gt; revision=&quot;refs/tags/fdd-v1.0&quot;
+$ git ci -a
+$ git push origin HEAD:fdd-v1.0
+
+$ git tag -a &quot;fdd-v1.0&quot; -m &quot;release fdd-v1.0&quot;
+$ git push origin --tags
+</code></pre><p>小版本发布</p>
+<pre><code>$ git co fdd-v1.0
+$ git co -b fdd-v1.1
+$ vim default.xml
+    revision=&quot;refs/tags/fdd-v1.0&quot; --&gt; revision=&quot;refs/tags/fdd-v1.1&quot;
+$ git ci -a
+$ git push origin HEAD:fdd-v1.1
+
+$ git tag -a &quot;fdd-v1.1&quot; -m &quot;release fdd-v1.1&quot;
+$ git push origin --tags
+</code></pre><hr>
+<p><strong>版权声明</strong></p>
+<p>作者: <a href="https://blog.tmc1900.com/about">Marcus Tang</a><br>许可证: <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" target="_blank" rel="noopener">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a><br>License: <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><br>本文永久链接: <a href="https://blog.tmc1900.com/scm-repo/">https://blog.tmc1900.com/scm-repo/</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Git-复合工程的-SCM-计划方案&quot;&gt;&lt;a href=&quot;#Git-复合工程的-SCM-计划方案&quot; class=&quot;headerlink&quot; title=&quot;Git 复合工程的 SCM 计划方案&quot;&gt;&lt;/a&gt;Git 复合工程的 SCM 计划方案&lt;/h1&gt;&lt;p&gt;Author
+    
+    </summary>
+    
+    
+      <category term="scm" scheme="https://blog.tmc1900.com/tags/scm/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Reopen WiKi</title>
     <link href="https://blog.tmc1900.com/rerepo-reopen/"/>
     <id>https://blog.tmc1900.com/rerepo-reopen/</id>
