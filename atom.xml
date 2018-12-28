@@ -43,6 +43,35 @@
   </entry>
   
   <entry>
+    <title>支持repo直接&quot;push&quot;的两种改法</title>
+    <link href="https://blog.tmc1900.com/rerepo-repo/"/>
+    <id>https://blog.tmc1900.com/rerepo-repo/</id>
+    <published>2017-02-12T10:00:00.000Z</published>
+    <updated>2017-02-12T10:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>2年前写过一篇关于git-repo工作流的博客，直到最近项目组引入了新的芯片平台才有机会运用，采用了与上游代码库一致的repo组织方式。但是repo一般需要与gerrit服务器进行配合，使用upload命令进行代码上传与评审，无法直接适用组内的gitlab。而repo本身是python语言开发的，初步了解原因后着手定制化也就势在必行了。<br>当然，还好国内的git指南一书作者”蒋鑫”前辈早早的已经解决了这个问题，实现了repo push的子命令并开源在github上 <a href="https://github.com/ossxp-com/repo/commit/1ce94da1e358a8b0c24eb25dda8a47cb7ef58bc7" target="_blank" rel="noopener">t/repo-push-subcommand · ossxp-com/repo@1ce94da</a>，可以直接支持多个仓库推送本地分支到远程的类git服务器。有兴趣的同学可以借鉴里面的实现，重点关注这次提交：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">commit 1ce94da1e358a8b0c24eb25dda8a47cb7ef58bc7</span><br><span class="line">t/repo-push-subcommand</span><br><span class="line">New repo push subcommand, which push to Git server directly,</span><br><span class="line">not through the Gerrit Server.</span><br></pre></td></tr></table></figure></p>
+<p>只是，多少认为copy一份upload的代码再修改为push的做法不够优雅，本着一切重复都是可以优化的原则，自然的想到尝试在upload命令直接兼容push操作的方式，最后只需要使用upload时需要添加–pm参数即可，也一并开源在本人github的group里 <a href="https://github.com/rerepo/reopen_repo/tree/tm-devdev" target="_blank" rel="noopener">rerepo/reopen_repo at tm-devdev</a></p>
+<blockquote>
+<p>里面还有一些其它的特性改进，不一一赘述了</p>
+</blockquote>
+<p>PS：再安利一篇”老罗”的博文 <a href="https://blog.csdn.net/luoshengyang/article/details/18195205" target="_blank" rel="noopener">repo源码分析</a>，内容非常详尽，读过后会对repo实现逻辑会有通透的了解，二次开发repo就已然成竹在胸:)</p>
+<hr>
+<p><strong>版权声明</strong></p>
+<p>作者: <a href="https://blog.tmc1900.com/about">Marcus Tang</a><br>许可证: <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" target="_blank" rel="noopener">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a><br>License: <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><br>本文永久链接: <a href="https://blog.tmc1900.com/rerepo-repo/">https://blog.tmc1900.com/rerepo-repo/</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;2年前写过一篇关于git-repo工作流的博客，直到最近项目组引入了新的芯片平台才有机会运用，采用了与上游代码库一致的repo组织方式。但是repo一般需要与gerrit服务器进行配合，使用upload命令进行代码上传与评审，无法直接适用组内的gitlab。而repo本身是
+    
+    </summary>
+    
+    
+      <category term="program" scheme="https://blog.tmc1900.com/tags/program/"/>
+    
+  </entry>
+  
+  <entry>
     <title>opensource 的循环依赖</title>
     <link href="https://blog.tmc1900.com/open-build/"/>
     <id>https://blog.tmc1900.com/open-build/</id>
@@ -120,32 +149,6 @@
     
     
       <category term="build" scheme="https://blog.tmc1900.com/tags/build/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>C语言笔记</title>
-    <link href="https://blog.tmc1900.com/c-language/"/>
-    <id>https://blog.tmc1900.com/c-language/</id>
-    <published>2016-10-12T07:35:21.000Z</published>
-    <updated>2016-10-12T07:44:15.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>C highlight</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Proxy.cpp</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  Created on: Dec 26, 2014</span></span><br><span class="line"><span class="comment"> *      Author: ubuntu</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"Proxy.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"RealSubject.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> proxy &#123;</span><br><span class="line"></span><br><span class="line">Proxy::Proxy() &#123;</span><br><span class="line">	<span class="comment">// TODO Auto-generated constructor stub</span></span><br><span class="line">	m_pRealSubject = <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Proxy::~Proxy() &#123;</span><br><span class="line">	<span class="comment">// TODO Auto-generated destructor stub</span></span><br><span class="line">	<span class="keyword">if</span> (m_pRealSubject) &#123;</span><br><span class="line">		<span class="keyword">delete</span> m_pRealSubject;</span><br><span class="line">		m_pRealSubject = <span class="literal">NULL</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> Proxy::Request() &#123;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"Proxy::Request()"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//<span class="doctag">NOTE:</span> NOT multi-thread safe</span></span><br><span class="line">	<span class="keyword">if</span> (<span class="literal">NULL</span> == m_pRealSubject) &#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"* new RealSubject"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">		<span class="comment">//<span class="doctag">NOTE:</span> Virtual Proxy when need to new RealSubject</span></span><br><span class="line">		m_pRealSubject = <span class="keyword">new</span> RealSubject();</span><br><span class="line">	&#125;</span><br><span class="line">	m_pRealSubject-&gt;Request();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125; <span class="comment">/* namespace proxy */</span> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>版权声明</strong></p>
-<p>作者: <a href="https://blog.tmc1900.com/about">Marcus Tang</a><br>许可证: <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" target="_blank" rel="noopener">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a><br>License: <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><br>本文永久链接: <a href="https://blog.tmc1900.com/c-language/">https://blog.tmc1900.com/c-language/</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;C highlight&lt;/p&gt;
-&lt;figure class=&quot;highlight cpp&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/spa
-    
-    </summary>
-    
-    
-      <category term="program" scheme="https://blog.tmc1900.com/tags/program/"/>
     
   </entry>
   
